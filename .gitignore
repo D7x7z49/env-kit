@@ -1,0 +1,52 @@
+# ========================================
+# Secrets & Credentials
+# ========================================
+.env
+.env.*
+*.secret
+credentials.json
+docker-compose.override.yml
+id_rsa*
+*.cert
+*.key
+*.keystore
+*.p12
+*.pem
+*.pfx
+
+# ========================================
+# Build Artifacts
+# ========================================
+.nyc_output/
+build/
+coverage/
+dist/
+out/
+release/
+target/
+*.class
+*.dll
+*.dylib
+*.exe
+*.jar
+*.so
+*.wasm
+
+# ========================================
+# Logs & Temp Files
+# ========================================
+logs/
+temp/
+tmp/
+*.log
+*.pid
+*.seed
+
+# ========================================
+# OS & Editor Files
+# ========================================
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.swo

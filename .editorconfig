@@ -1,0 +1,94 @@
+# ========================================
+# EditorConfig Root Configuration
+# ========================================
+root = true
+
+# ========================================
+# Universal (Applies to all files)
+# ========================================
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# ========================================
+# Configuration Files
+# ========================================
+
+# YAML Configuration
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# XML Configuration
+[*.{xml,xsd,xslt}]
+indent_style = space
+indent_size = 2
+
+# INI/TOML Configuration
+[*.{ini,toml}]
+indent_style = space
+indent_size = 2
+
+# JSON Configuration
+[*.{json,jsonc,json5}]
+indent_style = space
+indent_size = 2
+insert_final_newline = false
+
+# Properties Files
+[*.{properties,cfg,conf}]
+indent_style = space
+indent_size = 2
+
+# Markdown Documentation
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = 80
+indent_size = 2
+
+# ========================================
+# Frontend Development
+# ========================================
+
+# HTML
+[*.{html,htm}]
+indent_style = space
+indent_size = 2
+
+# JavaScript/TypeScript
+[*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}]
+indent_style = space
+indent_size = 2
+
+# CSS/SCSS/SASS/LESS
+[*.{css,scss,sass,less}]
+indent_style = space
+indent_size = 2
+
+# Vue.js Single File Components
+[*.vue]
+indent_style = space
+indent_size = 2
+
+# ========================================
+# Backend Development
+# ========================================
+
+# Bash/Shell
+[*.sh]
+indent_style = space
+indent_size = 2
+
+# PowerShell
+[*.ps1]
+indent_style = space
+indent_size = 4
+end_of_line = crlf
+
+# Python
+[*.py]
+indent_style = space
+indent_size = 4
+max_line_length = 88

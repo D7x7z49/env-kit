@@ -17,8 +17,17 @@
 #   ks  kickstart      nvim-kickstart
 
 set -euo pipefail
-IFS=$'\n\t'
-source "$(dirname "$0")/lib/log.sh"
+
+# ========================================
+# Style helpers
+# ========================================
+readonly I="  "
+log()    { echo "${I}[+] $*"; }
+proc()   { echo "${I}[-] $*"; }
+inter()  { echo "${I}[*] $*"; }
+warn()   { echo "${I}[?] $*"; }
+err()    { echo "${I}[!] $*" >&2; exit 1; }
+sep()    { echo "---"; }
 
 # ========================================
 # Constants

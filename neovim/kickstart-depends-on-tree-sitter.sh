@@ -27,12 +27,21 @@
 #   PROXY=http://proxy:port  ./kickstart-depends-on-tree-sitter.sh
 
 set -euo pipefail
-IFS=$'\n\t'
-source "$(dirname "$0")/lib/log.sh"
+
+# ========================================
+# Style helpers
+# ========================================
+readonly I="  "
+log()    { echo "${I}[+] $*"; }
+proc()   { echo "${I}[-] $*"; }
+inter()  { echo "${I}[*] $*"; }
+warn()   { echo "${I}[?] $*"; }
+err()    { echo "${I}[!] $*" >&2; exit 1; }
+sep()    { echo "---"; }
 
 # ========================================
 # Constants
-# =========================================
+# ========================================
 readonly MIN_VERSION="0.26.1"
 readonly BIN_DIR="${HOME}/.local/bin"
 readonly GH_REPO="tree-sitter/tree-sitter"
@@ -40,7 +49,7 @@ readonly GH_API="https://api.github.com/repos/${GH_REPO}/releases/latest"
 readonly KS_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/nvim-kickstart"
 
 # ========================================
-# Helpers — sourced from lib/log.sh
+# Helpers
 # ========================================
 
 valid_semver() {
@@ -50,7 +59,7 @@ valid_semver() {
 
 # ========================================
 # Pre-flight checks
-# =========================================
+# ========================================
 if [[ ! -d "$KS_CONFIG_DIR" ]]; then
   err "kickstart.nvim config not found at ${KS_CONFIG_DIR}
 
@@ -61,7 +70,7 @@ fi
 
 # ========================================
 # Check existing installation
-# =========================================
+# ========================================
 if command -v tree-sitter &>/dev/null; then
   existing=$(tree-sitter --version 2>/dev/null | grep -oP '\d+\.\d+\.\d+' | head -1 || true)
   if [[ -n "$existing" ]] && valid_semver "$existing" "$MIN_VERSION"; then
@@ -75,7 +84,7 @@ fi
 
 # ========================================
 # Detect architecture
-# =========================================
+# ========================================
 arch=$(uname -m)
 case "$arch" in
   x86_64)  asset_tag="linux-x64"    ;;
@@ -87,7 +96,7 @@ esac
 
 # ========================================
 # Fetch download URL
-# =========================================
+# ========================================
 inter "fetching latest release info from ${GH_REPO}..."
 
 if [[ -n "${PROXY:-}" ]]; then
@@ -108,7 +117,7 @@ fi
 
 # ========================================
 # Download and install
-# =========================================
+# ========================================
 tmpdir=$(mktemp -d)
 trap 'rm -rf "$tmpdir"' EXIT
 
@@ -121,7 +130,7 @@ chmod +x "${BIN_DIR}/tree-sitter"
 
 # ========================================
 # Verify
-# =========================================
+# ========================================
 if ! command -v tree-sitter &>/dev/null; then
   err "installation succeeded but tree-sitter is not in PATH.
 
@@ -135,7 +144,7 @@ log "version: ${version}"
 
 # ========================================
 # Quick health check
-# =========================================
+# ========================================
 echo ""
 proc "running kickstart.nvim checkhealth for nvim-treesitter..."
 if NVIM_APPNAME=nvim-kickstart nvim --headless \

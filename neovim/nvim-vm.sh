@@ -11,8 +11,17 @@
 #   ~/.local/bin/nvim -> .../versions/<tag>/nvim-linux-<arch>/bin/nvim
 
 set -euo pipefail
-IFS=$'\n\t'
-source "$(dirname "$0")/lib/log.sh"
+
+# ========================================
+# Style helpers
+# ========================================
+readonly I="  "
+log()    { echo "${I}[+] $*"; }
+proc()   { echo "${I}[-] $*"; }
+inter()  { echo "${I}[*] $*"; }
+warn()   { echo "${I}[?] $*"; }
+err()    { echo "${I}[!] $*" >&2; exit 1; }
+sep()    { echo "---"; }
 
 # ========================================
 # Constants
@@ -31,10 +40,6 @@ readonly NIGHTLY="nightly"
 readonly CONNECT_TIMEOUT=30
 readonly MAX_TIMEOUT=120
 readonly API_TIMEOUT=15
-
-# ========================================
-# Style helpers — sourced from lib/log.sh
-# ========================================
 
 # ========================================
 # Dependency check

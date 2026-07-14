@@ -12,6 +12,7 @@
 
 set -euo pipefail
 IFS=$'\n\t'
+source "$(dirname "$0")/lib/log.sh"
 
 # ========================================
 # Constants
@@ -32,13 +33,8 @@ readonly MAX_TIMEOUT=120
 readonly API_TIMEOUT=15
 
 # ========================================
-# Style helpers
+# Style helpers — sourced from lib/log.sh
 # ========================================
-readonly I="  "
-log()    { echo "${I}$*"; }
-log2()   { echo "${I}${I}$*"; }
-header() { echo "== $* =="; }
-die()    { echo "error: $*" >&2; exit 1; }
 
 # ========================================
 # Dependency check
@@ -48,7 +44,7 @@ check_deps() {
   for cmd in curl jq tar sha256sum; do
     command -v "$cmd" &>/dev/null || missing+=("$cmd")
   done
-  [[ ${#missing[@]} -eq 0 ]] || die "missing: ${missing[*]}"
+  [[ ${#missing[@]} -eq 0 ]] || err "missing: ${missing[*]}"
 }
 
 # ========================================
@@ -63,7 +59,7 @@ arch_label() {
   case "$arch" in
     x86_64)        echo "x86_64" ;;
     aarch64|arm64) echo "arm64" ;;
-    *)             die "unsupported architecture: ${arch}" ;;
+    *)             err "unsupported architecture: ${arch}" ;;
   esac
 }
 
@@ -107,20 +103,20 @@ download_extract() {
   local url="https://github.com/${REPO}/releases/download/${tag}/${asset}"
   local tmpdir; tmpdir="$(mktemp -d)"
 
-  log "downloading ${asset}"
+  inter "downloading ${asset}"
   curl -sL --connect-timeout "$CONNECT_TIMEOUT" --max-time "$MAX_TIMEOUT" \
     "$url" -o "${tmpdir}/${asset}"
 
   # sha256 verification
-  log "verifying checksum"
+  proc "verifying checksum"
   local computed; computed="$(sha256sum "${tmpdir}/${asset}" | cut -d' ' -f1)"
   local expected; expected="$(fetch_asset_digest "$tag" "$asset")"
   if [[ "$computed" != "$expected" ]]; then
     rm -rf "$tmpdir"
-    die "sha256 mismatch for ${asset}"
+    err "sha256 mismatch for ${asset}"
   fi
 
-  log "extracting to ${VERSIONS}/${tag}/"
+  proc "extracting to ${VERSIONS}/${tag}/"
   mkdir -p "${VERSIONS}/${tag}"
   tar xzf "${tmpdir}/${asset}" -C "${VERSIONS}/${tag}"
   rm -rf "$tmpdir"
@@ -131,7 +127,7 @@ set_current() {
   local arch; arch="$(arch_label)"
   local target="${VERSIONS}/${tag}/nvim-linux-${arch}/bin/nvim"
 
-  [[ -f "$target" ]] || die "binary not found: ${target}"
+  [[ -f "$target" ]] || err "binary not found: ${target}"
   mkdir -p "${BIN}"
   ln -sfn "$target" "${BIN}/nvim"
 }
@@ -161,12 +157,11 @@ EOF
 }
 
 cmd_list() {
-  header "Neovim releases"
   while IFS=$'\t' read -r tag date prerelease; do
     if [[ "$prerelease" == "pre" ]]; then
-      log "$(printf "%-18s %s  pre" "$tag" "$date")"
+      echo "$(printf "%-18s %s  pre" "$tag" "$date")"
     else
-      log "$(printf "%-18s %s" "$tag" "$date")"
+      echo "$(printf "%-18s %s" "$tag" "$date")"
     fi
   done < <(fetch_releases)
 }
@@ -178,7 +173,7 @@ cmd_add() {
   while [[ $# -gt 0 ]]; do
     case "$1" in
       -f|--force) force=true; shift ;;
-      -*)         die "unknown flag: $1" ;;
+      -*)         err "unknown flag: $1" ;;
       *)          tag="$1"; shift ;;
     esac
   done
@@ -196,27 +191,26 @@ cmd_add() {
       log "already installed: ${tag}"
       return
     fi
-    log "reinstalling ${tag}"
+    inter "reinstalling ${tag}"
   fi
 
-  header "install ${tag}"
   ensure_dirs
-  tag_exists "$tag" || die "tag not found: ${tag}"
+  tag_exists "$tag" || err "tag not found: ${tag}"
   download_extract "$tag"
   log "done"
 }
 
 cmd_remove() {
   local tag="${1:-}"
-  [[ -n "$tag" ]] || die "usage: nvim-vm remove <version>"
+  [[ -n "$tag" ]] || err "usage: nvim-vm remove <version>"
 
-  [[ -d "${VERSIONS}/${tag}" ]] || die "not installed: ${tag}"
+  [[ -d "${VERSIONS}/${tag}" ]] || err "not installed: ${tag}"
 
   # check if currently active
   local arch; arch="$(arch_label)"
   local target="${VERSIONS}/${tag}/nvim-linux-${arch}/bin/nvim"
   if [[ -L "${BIN}/nvim" ]] && [[ "$(readlink "${BIN}/nvim")" == "$target" ]]; then
-    die "active version — use 'use <other>' first"
+    err "active version — use 'use <other>' first"
   fi
 
   rm -rf "${VERSIONS}/${tag}"
@@ -224,7 +218,6 @@ cmd_remove() {
 }
 
 cmd_clean() {
-  header "clean"
   if [[ -L "${BIN}/nvim" ]]; then
     rm "${BIN}/nvim"
     log "removed symlink: ${BIN}/nvim"
@@ -236,7 +229,6 @@ cmd_clean() {
 }
 
 cmd_info() {
-  header "nvim-vm status"
   log "arch:   $(arch_label)"
   log "home:   ${HOME_DIR}"
   log "bin:    ${BIN}"
@@ -252,24 +244,24 @@ cmd_info() {
         local ver_arch; ver_arch="$(arch_label)"
         local bin="${dir}nvim-linux-${ver_arch}/bin/nvim"
         if [[ -n "$current" && "$bin" == "$current" ]]; then
-          log2 "* ${ver}"
+          echo "${I}${I}* ${ver}"
         else
-          log2 "  ${ver}"
+          echo "${I}${I}  ${ver}"
         fi
       done
     else
-      log2 "(none)"
+      echo "${I}${I}(none)"
     fi
   else
-    log2 "(none)"
+    echo "${I}${I}(none)"
   fi
   echo ""
   log "current:"
   if [[ -L "${BIN}/nvim" ]]; then
     local target; target="$(readlink "${BIN}/nvim")"
-    log2 "${target}"
+    echo "${I}${I}${target}"
   else
-    log2 "not set"
+    echo "${I}${I}not set"
   fi
 }
 
@@ -312,7 +304,7 @@ main() {
     info)                cmd_info "$@" ;;
     use)                 cmd_use "$@" ;;
     upgrade)             cmd_upgrade "$@" ;;
-    *)                   die "unknown: $cmd" ;;
+    *)                   err "unknown: $cmd" ;;
   esac
 }
 

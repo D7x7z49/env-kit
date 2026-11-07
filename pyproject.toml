@@ -1,0 +1,16 @@
+# @path[pyproject.toml]
+[project]
+name = "env-kit"
+version = "0.1.0"
+description = "Personal dotfiles and computing environment"
+requires-python = ">=3.11"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.7.0",
+    "ruff>=0.17.2",
+]
+
+[tool.uv]
+required-version = ">=0.13.1"

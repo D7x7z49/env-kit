@@ -17,6 +17,8 @@ id_rsa*
 # ========================================
 # Build Artifacts
 # ========================================
+.venv/
+__pycache__/
 .nyc_output/
 build/
 coverage/

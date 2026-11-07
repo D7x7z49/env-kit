@@ -45,7 +45,9 @@ tmp/
 # ========================================
 # Tool Config
 # ========================================
-.apiscope/
+# track the project source list; keep local settings and schema out
+.apiscope/*
+!.apiscope/config.json
 
 # ========================================
 # OS & Editor Files

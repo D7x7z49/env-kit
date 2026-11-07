@@ -1,0 +1,65 @@
+{
+  "$schema": "./schema/config.schema.json",
+  "source": {
+    "neovim": {
+      "doc_type": "repo",
+      "doc_src": "https://github.com/neovim/neovim.git/runtime/doc@master",
+      "doc_ttl": 7
+    },
+    "lazyvim": {
+      "doc_type": "repo",
+      "doc_src": "https://github.com/LazyVim/lazyvim.github.io.git/docs@main",
+      "doc_ttl": 7
+    },
+    "astronvim": {
+      "doc_type": "repo",
+      "doc_src": "https://github.com/AstroNvim/docs.git/src/content/docs@main",
+      "doc_ttl": 7
+    },
+    "nvchad": {
+      "doc_type": "repo",
+      "doc_src": "https://github.com/NvChad/nvchad.github.io.git/src/routes/docs@main",
+      "doc_ttl": 7
+    },
+    "kickstart": {
+      "doc_type": "repo",
+      "doc_src": "https://github.com/nvim-lua/kickstart.nvim.git@master",
+      "doc_ttl": 7
+    },
+    "tmux": {
+      "doc_type": "repo",
+      "doc_src": "https://github.com/tmux/tmux.git@master",
+      "doc_ttl": 7
+    },
+    "tmux-wiki": {
+      "doc_type": "repo",
+      "doc_src": "https://github.com/tmux/tmux.wiki.git@master",
+      "doc_ttl": 7
+    },
+    "fhs": {
+      "doc_type": "repo",
+      "doc_src": "https://gitlab.freedesktop.org/FHS/fhs-spec.git/xml@main",
+      "doc_ttl": 30
+    },
+    "xdg-basedir": {
+      "doc_type": "repo",
+      "doc_src": "https://gitlab.freedesktop.org/xdg/xdg-specs.git/basedir@master",
+      "doc_ttl": 30
+    },
+    "systemd-man": {
+      "doc_type": "repo",
+      "doc_src": "https://github.com/systemd/systemd.git/man@main",
+      "doc_ttl": 14
+    },
+    "systemd-docs": {
+      "doc_type": "repo",
+      "doc_src": "https://github.com/systemd/systemd.git/docs@main",
+      "doc_ttl": 14
+    },
+    "man-pages": {
+      "doc_type": "repo",
+      "doc_src": "https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git/man@master",
+      "doc_ttl": 30
+    }
+  }
+}

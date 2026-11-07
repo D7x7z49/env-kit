@@ -100,3 +100,11 @@ end_of_line = crlf
 indent_style = space
 indent_size = 4
 max_line_length = 88
+
+# ========================================
+# Build Files
+# ========================================
+
+# make recipes require tabs
+[Makefile]
+indent_style = tab

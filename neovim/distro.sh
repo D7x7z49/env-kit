@@ -3,6 +3,7 @@
 # distro — Neovim distribution manager
 #
 # Manage Neovim distribution configs via NVIM_APPNAME.
+# see neovim starting.txt for NVIM_APPNAME and the xdg directories.
 # Aliases are written to ~/.bash_aliases.
 #
 # Usage:

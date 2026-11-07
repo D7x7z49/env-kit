@@ -76,6 +76,7 @@ def message(key: str, **values: object) -> str:
 
 
 # tmux is posix-only; every supported system uses xdg or ~/.config.
+# see xdg-basedir/basedir-spec.xml for the base directory rules.
 def config_home() -> Path:
     xdg = os.environ.get("XDG_CONFIG_HOME")
     if xdg and Path(xdg).is_absolute():
@@ -103,6 +104,7 @@ def part_files() -> list[Path]:
 
 def tmux_quote(path: Path) -> str:
     # double quotes keep spaces; escaped characters keep tmux expansion out
+    # see the PARSING SYNTAX section of tmux.1 for $ and ~ expansion
     text = path.as_posix()
     for char in ("\\", '"', "$", "~"):
         text = text.replace(char, "\\" + char)

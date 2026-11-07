@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# @path[neovim/nvim-vm.sh]
 #
 # nvim-vm — Neovim Version Manager (Linux-only)
 #

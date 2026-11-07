@@ -112,4 +112,3 @@ REFERENCES
 - keep chat and writing conventions in `.agent/rule/core/agent/`.
 - keep rule and experience formats in `.agent/rule/core/format/`.
 - add a project convention as a rule, and a past decision as an experience.
-

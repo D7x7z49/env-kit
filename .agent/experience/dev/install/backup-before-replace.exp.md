@@ -13,9 +13,11 @@ STEP.
 - return exit code `1` with one message when a step fails
 
 NOTE.
-- evidence: `tmux/install.py` copies the config dir to `tmux.bak-<stamp>` and replaces `tmux.conf` through a temporary file
+- evidence: `tmux/install.py` copies the config dir to `tmux.bak-<stamp>`
+- evidence: it replaces `tmux.conf` through a temporary file
 - evidence: `neovim/distro.sh` moves an existing config dir to `<dir>.bak.<epoch>` before a clone
-- the stamp keeps two runs in one minute from sharing a backup path in python, and the epoch stamp keeps them ordered in shell
+- the python stamp carries microseconds, so two runs cannot collide
+- the shell stamp uses epoch seconds and stays readable when sorted
 - a backup is cheap because the target is small and text based
 - a failed backup must stop the install, because the next write would destroy the previous state
 - an install that reports its paths can be reversed by hand without reading the script

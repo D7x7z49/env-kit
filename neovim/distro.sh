@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# @path[neovim/distro.sh]
 #
 # distro — Neovim distribution manager
 #

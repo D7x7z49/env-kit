@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# @path[neovim/clean.sh]
 #
 # clean — remove Neovim config/data/state/cache directories
 #

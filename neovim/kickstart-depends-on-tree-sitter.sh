@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# @path[neovim/kickstart-depends-on-tree-sitter.sh]
 #
 # kickstart-depends-on-tree-sitter.sh
 #

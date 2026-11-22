@@ -1,0 +1,127 @@
+(* .agent/rule/core/format/skill-file-format.ebnf *)
+(* ebnf subset version: 1 *)
+(* format: two-space indent; rule name, =, expression, and ; use separate lines *)
+
+(* path: .agent/skill/<target>/<aspect>/<name>/SKILL.md *)
+
+(*
+  NONE.
+  - a skill directory holds `SKILL.md` and optional `scripts/` and `references/`
+  - `scripts/` holds the deterministic part, `references/` holds detail
+  - a payload file carries no header and only the shared file rules
+*)
+
+skill_file
+  = front_matter, header, body, [ footer ]
+  ;
+
+(* ========================================================================== *)
+(* FRONT MATTER                                                               *)
+(* ========================================================================== *)
+
+(* the pi skill loader reads these two fields *)
+front_matter
+  = "---", eol, name_field, description_field, "---", eol
+  ;
+
+name_field
+  = "name: ", skill_name, eol
+  ;
+
+description_field
+  = "description: >", eol, line, { line }
+  ;
+
+skill_name
+  = ? regex:/[a-z0-9]+(-[a-z0-9]+)*/ ?
+  ;
+
+(* ========================================================================== *)
+(* HEADER                                                                     *)
+(* ========================================================================== *)
+
+header
+  = path_comment, desc_comment
+  ;
+
+path_comment
+  = "<!-- @path[", path, "] -->", eol
+  ;
+
+desc_comment
+  = "<!--", desc, "-->", eol
+  ;
+
+path
+  = ? a file system path or URL link ?
+  ;
+
+desc
+  = ? regex:/[^\n\r]*/ ?
+  ;
+
+(* ========================================================================== *)
+(* BODY                                                                       *)
+(* ========================================================================== *)
+
+body
+  = element, { element }
+  ;
+
+element
+  = scope
+  | list
+  | block
+  ;
+
+scope
+  = ? regex:/[A-Z][A-Z ]*/, eol
+  ;
+
+list
+  = item, { item }
+  ;
+
+(* a nested item repeats the shape with a two-space indent *)
+item
+  = "- ", text, eol
+  | "  ", item
+  ;
+
+(* a fenced code block carries an example, and the fence carries a language *)
+block
+  = fence, { text, eol }, fence
+  ;
+
+fence
+  = "```", language, eol
+  ;
+
+language
+  = ? a language tag ?
+  ;
+
+(* ========================================================================== *)
+(* FOOTER                                                                     *)
+(* ========================================================================== *)
+
+footer
+  = "---", eol
+  ;
+
+(* ========================================================================== *)
+(* BASIC ELEMENTS                                                             *)
+(* ========================================================================== *)
+
+text
+  = ? regex:/[^\n\r]*/ ?
+  ;
+
+line
+  = text, eol
+  ;
+
+eol
+  = "\n"
+  | "\r\n"
+  ;

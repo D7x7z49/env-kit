@@ -22,7 +22,9 @@ repos:
     rev: v0.3.0
     hooks:
       - id: fix-headers
+        # a skill file starts with front matter, so the hook must skip it
         files: '^(?:\.pre-commit-config\.yaml|pyproject\.toml|ruff\.toml)$|^(?:\.agent|neovim|scripts|tmux)/'
+        exclude: '^\.agent/skill/.*/SKILL\.md$'
 
   - repo: https://github.com/D7x7z49/lint-editor
     rev: v0.4.0

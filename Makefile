@@ -30,7 +30,7 @@ fmt:  ## format python and apply safe lint fixes
 	uv run --no-env-file --locked ruff check --fix .
 	uv run --no-env-file --locked ruff format .
 
-agent-check:  ## check the .agent file formats
+agent-check:  ## check the .agent layout, names, budgets, and formats
 	uv run --no-env-file --locked python scripts/ci/check-agent-files.py
 
 check: lock-check  ## run the full local check

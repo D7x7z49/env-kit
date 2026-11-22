@@ -109,6 +109,8 @@ EVOLUTION
 
 REFERENCES
 - read `.agent/AGENTS.md` to navigate project rules and experience.
+- read `.agent/rule/git/precheck/precheck-gate.rule.md` before any commit.
 - keep chat and writing conventions in `.agent/rule/core/agent/`.
-- keep rule and experience formats in `.agent/rule/core/format/`.
+- keep rule, experience, and skill formats in `.agent/rule/core/format/`.
+- keep a task procedure with its own script in `.agent/skill/`.
 - add a project convention as a rule, and a past decision as an experience.

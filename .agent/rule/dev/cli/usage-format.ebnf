@@ -1,0 +1,74 @@
+(* .agent/rule/dev/cli/usage-format.ebnf *)
+(* ebnf subset version: 1 *)
+(* format: two-space indent; rule name, =, expression, and ; use separate lines *)
+
+(* ========================================================================== *)
+(* USAGE BLOCK                                                                *)
+(* ========================================================================== *)
+
+(* the block in a script header or a python docstring that states how to run
+   the tool and what it returns *)
+
+usage_block
+  = element, { element }
+  ;
+
+element
+  = plain
+  | blank
+  | usage_section
+  | section
+  ;
+
+(* an unindented line before the label, such as a purpose note *)
+plain
+  = text, eol
+  ;
+
+blank
+  = eol
+  ;
+
+(* ========================================================================== *)
+(* SECTIONS                                                                   *)
+(* ========================================================================== *)
+
+usage_section
+  = label, eol, entry, { entry }
+  ;
+
+(* a further labelled group, such as `exit codes:` or `keys:` *)
+section
+  = label, eol, entry, { entry }
+  ;
+
+(* a word followed by a colon; write it in lower case in new text *)
+label
+  = text, ":", eol
+  ;
+
+(* one indented line; align a trailing note with extra spaces *)
+entry
+  = "  ", text, eol
+  ;
+
+(* ========================================================================== *)
+(* BASIC ELEMENTS                                                             *)
+(* ========================================================================== *)
+
+(*
+  NONE.
+  - name the usage label `usage:`, so a reader can find the entry point
+  - keep one command on one line, as a runnable command
+  - state the exit codes after the usage, one code per line
+  - keep the block in the header comment of a script
+  - keep the block in the docstring of a python tool
+*)
+text
+  = ? regex:/[^\n\r]*/ ?
+  ;
+
+eol
+  = "\n"
+  | "\r\n"
+  ;

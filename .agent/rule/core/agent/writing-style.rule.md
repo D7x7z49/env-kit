@@ -12,6 +12,7 @@ DELIMITERS
 - wrap a value inside a message in square brackets
 - wrap an external reference in angle brackets
 - use parentheses for supplementary information
+- open a fenced code block with a language tag
 
 PROSE
 - write in natural english word order

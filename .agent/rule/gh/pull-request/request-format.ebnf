@@ -1,0 +1,103 @@
+(* .agent/rule/gh/pull-request/request-format.ebnf *)
+(* ebnf subset version: 1 *)
+(* format: two-space indent; rule name, =, expression, and ; use separate lines *)
+
+(* ========================================================================== *)
+(* PULL REQUEST                                                               *)
+(* ========================================================================== *)
+
+pull_request
+  = title, description
+  ;
+
+(* ========================================================================== *)
+(* TITLE                                                                      *)
+(* ========================================================================== *)
+
+(* a conventional commits header, reused as the merge commit message *)
+title
+  = type, [ scope ], [ "!" ], ": ", summary
+  ;
+
+type
+  = "feat"
+  | "fix"
+  | "docs"
+  | "style"
+  | "refactor"
+  | "perf"
+  | "test"
+  | "build"
+  | "ci"
+  | "chore"
+  | "revert"
+  ;
+
+scope
+  = "(", identifier, ")"
+  ;
+
+summary
+  = line
+  ;
+
+(* ========================================================================== *)
+(* DESCRIPTION                                                                *)
+(* ========================================================================== *)
+
+description
+  = motivation, [ eol, supplement ]
+  ;
+
+motivation
+  = "MOTIVATION", eol, paragraphs
+  ;
+
+paragraphs
+  = paragraph, { paragraph }
+  ;
+
+paragraph
+  = "- ", line
+  ;
+
+supplement
+  = "REFERENCES", eol, references
+  ;
+
+references
+  = reference, { reference }
+  ;
+
+reference
+  = "- ", ( "#", number | url ), eol
+  ;
+
+(* ========================================================================== *)
+(* BASIC ELEMENTS                                                             *)
+(* ========================================================================== *)
+
+identifier
+  = ? regex:/[A-Za-z][A-Za-z0-9-]*/ ?
+  ;
+
+number
+  = ? regex:/[1-9][0-9]*/ ?
+  ;
+
+url
+  = ? regex:/[a-zA-Z][a-zA-Z0-9+.-]*:\/\/[^\s]+/ ?
+  ;
+
+line
+  = content, eol
+  ;
+
+content
+  = ? regex:/[^\n\r]*/ ?
+  ;
+
+eol
+  = "\n"
+  | "\r\n"
+  ;

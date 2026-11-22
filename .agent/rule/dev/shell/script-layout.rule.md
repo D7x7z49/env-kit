@@ -5,6 +5,7 @@ HEADER
 - start with `#!/usr/bin/env bash` on the first line
 - follow with a comment block for name, purpose, usage, and supported targets
 - write usage lines as runnable commands
+- shape the usage block after `rule/dev/cli/usage-format.ebnf`
 - state directory layout when the script manages paths
 
 RELIABILITY
